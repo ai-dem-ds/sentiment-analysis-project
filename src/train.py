@@ -1,5 +1,7 @@
-from sklearn.model_selection import train_test_split
+import argparse
+
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
 def load_and_validate_data(data_path: str) -> pd.DataFrame:
     """
@@ -10,8 +12,14 @@ def load_and_validate_data(data_path: str) -> pd.DataFrame:
         raise ValueError("CSV must contain 'text' and 'label' columns")
     return df
 
+# Replace the old if __name__ block with this one
 if __name__ == "__main__":
-    df = load_and_validate_data("sentiments.csv")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--data", default="data/sentiments.csv")
+    parser.add_argument("--out", default="models/sentiment.joblib")
+
+    args: argparse.Namespace = parser.parse_args()
+    main(data_path=args.data, model_path=args.out)
 
 def split_data(
     df: pd.DataFrame,
