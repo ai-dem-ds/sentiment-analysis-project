@@ -13,4 +13,8 @@ conda activate sentiment-env
 pip install -r requirements.txt
 
 ## Train
-python src/train.py --data data/train.csv --out models/sentiment.joblib
+python src/train.py --data data/sentiments.csv --out models/sentiment.joblib
+
+This trains a model from the CSV and saves it to models/
+
+CSV should contain text and label columns
