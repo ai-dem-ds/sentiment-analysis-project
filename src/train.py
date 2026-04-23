@@ -14,11 +14,25 @@ def load_and_validate_data(data_path: str) -> pd.DataFrame:
     """
     Loads data from a CSV and ensures it has the required columns.
     """
-    df = pd.read_csv(data_path)
+    try:
+        df = pd.read_csv(data_path)
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(
+            f"Data file not found: {data_path}. Check the path and file name."
+        ) from exc
+    except pd.errors.EmptyDataError as exc:
+        raise ValueError(
+            f"CSV is empty: {data_path}. Provide a CSV with 'text' and 'label' columns."
+        ) from exc
+    except pd.errors.ParserError as exc:
+        raise ValueError(
+            f"CSV appears corrupted or malformed: {data_path}."
+        ) from exc
+
     if not {"text", "label"}.issubset(df.columns):
         raise ValueError("CSV must contain 'text' and 'label' columns")
-    return df
 
+    return df
 
 def split_data(
     df: pd.DataFrame,
