@@ -92,6 +92,6 @@ if __name__ == "__main__":
     parser.add_argument("--out", default="models/sentiment.joblib")
 
     args: argparse.Namespace = parser.parse_args()
-    main(data_path=args.data, model_path=args.output)
+    main(data_path=args.data, model_path=args.out)
 
 #This is a comment to test the pull request functionality.
