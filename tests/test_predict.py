@@ -1,5 +1,5 @@
-import pytest
 from src.predict import predict_sentiment
+
 
 def test_predict_sentiment_positive():
     """Test that an obciously positive sentence is predicted as positive."""
@@ -13,4 +13,3 @@ def test_predict_sentiment_negative():
     text = "The service was terrible and the food was awful."
     prediction = predict_sentiment(text)
     assert prediction == 0
-

@@ -3,9 +3,9 @@ import os
 
 import pandas as pd
 from joblib import dump
-from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline, make_pipeline
 
 
@@ -24,14 +24,13 @@ def load_and_validate_data(data_path: str) -> pd.DataFrame:
             f"CSV is empty: {data_path}. Provide a CSV with 'text' and 'label' columns."
         ) from exc
     except pd.errors.ParserError as exc:
-        raise ValueError(
-            f"CSV appears corrupted or malformed: {data_path}."
-        ) from exc
+        raise ValueError(f"CSV appears corrupted or malformed: {data_path}.") from exc
 
     if not {"text", "label"}.issubset(df.columns):
         raise ValueError("CSV must contain 'text' and 'label' columns")
 
     return df
+
 
 def split_data(
     df: pd.DataFrame,
@@ -42,7 +41,11 @@ def split_data(
     try:
         # Stratified split is preferred
         X_train, X_test, y_train, y_test = train_test_split(
-            df["text"], df["label"], test_size=0.2, random_state=42, stratify=df["label"]
+            df["text"],
+            df["label"],
+            test_size=0.2,
+            random_state=42,
+            stratify=df["label"],
         )
     except ValueError:
         # Fallback if stratification fails (e.g., on very small datasets)
@@ -63,13 +66,13 @@ def train_model(X_train: pd.Series, y_train: pd.Series) -> Pipeline:
     clf_pipeline.fit(X_train, y_train)
     return clf_pipeline
 
+
 def save_model(model: Pipeline, model_path: str) -> None:
     """
     Saves the trained model to a file.
     """
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
     dump(model, model_path)
-    print(f"Saved model to {model_path}")
 
 
 def main(data_path: str, model_path: str) -> None:
@@ -81,10 +84,10 @@ def main(data_path: str, model_path: str) -> None:
     clf = train_model(X_train, y_train)
 
     # Evaluate and print accuracy
-    acc = clf.score(X_test, y_test)
-    print(f"Test accuracy: {acc:.3f}")
+    # acc = clf.score(X_test, y_test)
 
     save_model(clf, model_path)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -94,4 +97,4 @@ if __name__ == "__main__":
     args: argparse.Namespace = parser.parse_args()
     main(data_path=args.data, model_path=args.out)
 
-#This is a comment to test the pull request functionality.
+# This is a comment to test the pull request functionality.
